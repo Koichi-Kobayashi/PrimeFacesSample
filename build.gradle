@@ -1,0 +1,78 @@
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'war'
+apply plugin: 'eclipse'
+
+def defaultEncoding = 'UTF-8'
+def jdkVersion = '1.8'
+def wildflyVersion = '8.2.0.Final'
+def cargoVersion = '1.4.14'
+
+sourceCompatibility = jdkVersion
+version = '0.0.1'
+
+repositories {
+  mavenCentral()
+  maven { url "https://repository.jboss.org/nexus/content/groups/public/" }
+}
+
+buildscript {
+  repositories { jcenter() }
+  dependencies { classpath 'org.gradle.api.plugins:gradle-cargo-plugin:1.5.1' }
+}
+
+apply plugin: 'cargo'
+
+dependencies {
+  compile 'org.quartz-scheduler:quartz:2.2.1'
+  providedCompile 'org.jboss.spec:jboss-javaee-all-7.0:1.0.3.Final'
+  providedCompile 'org.projectlombok:lombok:1.16.4'
+  providedCompile 'org.picketlink:picketlink-api:2.5.2.Final'
+  providedCompile 'org.picketlink:picketlink-impl:2.5.2.Final'
+  providedCompile 'org.slf4j:slf4j-api:1.7.12'
+  testCompile 'org.codehaus.groovy:groovy-all:2.4.3'
+  testCompile 'junit:junit:4.12'
+  testCompile 'org.jboss.arquillian.junit:arquillian-junit-container:1.1.8.Final'
+  testCompile "org.wildfly:wildfly-arquillian-container-remote:${wildflyVersion}"
+  testCompile 'org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-depchain:2.1.1'
+
+  cargo "org.wildfly:wildfly-controller:${wildflyVersion}"
+  cargo "org.codehaus.cargo:cargo-core-uberjar:${cargoVersion}"
+  cargo "org.codehaus.cargo:cargo-ant:${cargoVersion}"
+}
+
+[compileJava, compileTestJava]*.options*.encoding = defaultEncoding
+
+cargo {
+  containerId = 'wildfly9x'
+  // port = 8080
+
+  deployable {
+    file = file("build/libs/javaee7-scaffold-${version}.war")
+    context = 'javaee7-scaffold'
+  }
+
+  remote {
+    hostname = 'localhost'
+    username = 'WildFlyAdmin'
+    password = 'D7kCtnaemN22tYt2'
+  }
+
+  local {
+    homeDir = file("$System.env.JBOSS_HOME")
+    containerProperties { property 'cargo.jboss.configuration', 'standalone-full' }
+  }
+}
+
+task deployLocal(type: Copy) {
+  from "build/libs/javaee7-scaffold-${version}.war"
+  into "$System.env.JBOSS_HOME/standalone/deployments"
+}
+
+[
+  cargoRunLocal,
+  cargoStartLocal,
+  cargoDeployRemote,
+  cargoRedeployRemote,
+  deployLocal
+].each { it.dependsOn assemble }
