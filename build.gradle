@@ -1,43 +1,42 @@
-apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'war'
 apply plugin: 'eclipse'
 
 def defaultEncoding = 'UTF-8'
 def jdkVersion = '1.8'
-def wildflyVersion = '8.2.0.Final'
-def cargoVersion = '1.4.14'
+def wildflyVersion = '9.0.0.Final'
+def cargoVersion = '1.4.15'
 
 sourceCompatibility = jdkVersion
-version = '0.0.1'
 
 repositories {
   mavenCentral()
-  maven { url "https://repository.jboss.org/nexus/content/groups/public/" }
+  maven {
+    url "https://repository.jboss.org/nexus/content/groups/public/"
+    url "http://repository.primefaces.org/"
+  }
 }
 
 buildscript {
   repositories { jcenter() }
-  dependencies { classpath 'org.gradle.api.plugins:gradle-cargo-plugin:1.5.1' }
+  dependencies { classpath 'com.bmuschko:gradle-cargo-plugin:2.2.1' }
 }
 
-apply plugin: 'cargo'
+apply plugin: 'com.bmuschko.cargo'
 
 dependencies {
-  compile 'org.quartz-scheduler:quartz:2.2.1'
-  providedCompile 'org.jboss.spec:jboss-javaee-all-7.0:1.0.3.Final'
+  compile 'org.primefaces:primefaces:5.3.RC1'
+  compile 'org.primefaces.extensions:primefaces-extensions:3.2.0'
+  providedCompile 'org.seasar.doma:doma:2.4.1'
   providedCompile 'org.projectlombok:lombok:1.16.4'
-  providedCompile 'org.picketlink:picketlink-api:2.5.2.Final'
-  providedCompile 'org.picketlink:picketlink-impl:2.5.2.Final'
-  providedCompile 'org.slf4j:slf4j-api:1.7.12'
+  providedCompile 'javax:javaee-api:7.0'
   testCompile 'org.codehaus.groovy:groovy-all:2.4.3'
   testCompile 'junit:junit:4.12'
-  testCompile 'org.jboss.arquillian.junit:arquillian-junit-container:1.1.8.Final'
-  testCompile "org.wildfly:wildfly-arquillian-container-remote:${wildflyVersion}"
-  testCompile 'org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-depchain:2.1.1'
 
-  cargo "org.wildfly:wildfly-controller:${wildflyVersion}"
+//  cargo "org.wildfly:wildfly-controller:${wildflyVersion}"
+  cargo 'org.wildfly:wildfly-controller-client:8.2.1.Final'
   cargo "org.codehaus.cargo:cargo-core-uberjar:${cargoVersion}"
+  cargo "org.codehaus.cargo:cargo-core-container-wildfly:${cargoVersion}"
   cargo "org.codehaus.cargo:cargo-ant:${cargoVersion}"
 }
 
@@ -48,8 +47,8 @@ cargo {
   // port = 8080
 
   deployable {
-    file = file("build/libs/javaee7-scaffold-${version}.war")
-    context = 'javaee7-scaffold'
+    file = file("build/libs/${project.name}.war")
+    context = "${project.name}"
   }
 
   remote {
@@ -65,7 +64,7 @@ cargo {
 }
 
 task deployLocal(type: Copy) {
-  from "build/libs/javaee7-scaffold-${version}.war"
+  from "build/libs/JavaEE7-Sample.war"
   into "$System.env.JBOSS_HOME/standalone/deployments"
 }
 
@@ -76,3 +75,9 @@ task deployLocal(type: Copy) {
   cargoRedeployRemote,
   deployLocal
 ].each { it.dependsOn assemble }
+
+/**
+ * 起動方法
+ * ./gradlew clean war deployLocal
+ * ./gradlew clean cargoRunLocal
+ */

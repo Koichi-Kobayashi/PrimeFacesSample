@@ -1,0 +1,19 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:p="http://primefaces.org/ui">
+  <h:head>
+  </h:head>
+  <h:body>
+    <p:selectOneMenu id="advanced" value="#{selectOneMenuView.theme}" converter="themeConverter" panelStyle="width:180px"
+                     effect="fade" var="t" style="width:160px" filter="true" filterMatchMode="startsWith">
+      <f:selectItems value="#{selectOneMenuView.themes}" var="theme" itemLabel="#{theme.displayName}" itemValue="#{theme}" />
+      <p:column style="width:10%">
+        <h:outputText styleClass="ui-theme ui-theme-#{t.name}" />
+      </p:column>
+      <p:column>
+        <h:outputText value="#{t.displayName}" />
+      </p:column>
+    </p:selectOneMenu>
+  </h:body>
+</html>

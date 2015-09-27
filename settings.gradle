@@ -16,4 +16,4 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'pf_sample'
+rootProject.name = 'JavaEE7-Sample'
