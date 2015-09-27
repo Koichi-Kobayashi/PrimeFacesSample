@@ -77,7 +77,9 @@ task deployLocal(type: Copy) {
 ].each { it.dependsOn assemble }
 
 /**
- * 起動方法
- * ./gradlew clean war deployLocal
- * ./gradlew clean cargoRunLocal
+ * 【起動方法」
+ * WildFlyを起動したのち ./gradlew clean war deployLocal
+ * WildFlyも一緒に起動(Ctrl+Cで終了) ./gradlew clean cargoRunLocal
+ * 【URL】
+ * http://localhost:8080/JavaEE7-Sample/
  */

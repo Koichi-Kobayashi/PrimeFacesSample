@@ -16,18 +16,18 @@ public class ThemeService {
   @PostConstruct
   public void init() {
     themes = new ArrayList<Theme>();
-    themes.add(new Theme(0, "Afterdark", "afterdark"));
-    themes.add(new Theme(1, "Afternoon", "afternoon"));
-    themes.add(new Theme(2, "Afterwork", "afterwork"));
-    themes.add(new Theme(3, "Aristo", "aristo"));
-    themes.add(new Theme(4, "Black-Tie", "black-tie"));
-    themes.add(new Theme(5, "Blitzer", "blitzer"));
-    themes.add(new Theme(6, "Bluesky", "bluesky"));
-    themes.add(new Theme(7, "Bootstrap", "bootstrap"));
-    themes.add(new Theme(8, "Casablanca", "casablanca"));
-    themes.add(new Theme(9, "Cupertino", "cupertino"));
-    themes.add(new Theme(10, "Cruze", "cruze"));
-    themes.add(new Theme(11, "Dark-Hive", "dark-hive"));
+    themes.add(new Theme(0, "Ａ", "Ａ"));
+    themes.add(new Theme(1, "ＡＢ", "ＡＢ"));
+    themes.add(new Theme(2, "ＡＢＣ", "ＡＢＣ"));
+    themes.add(new Theme(3, "ＡＢＣＤ", "ＡＢＣＤ"));
+    themes.add(new Theme(4, "Ｘ", "Ｘ"));
+    themes.add(new Theme(5, "ＸＹ", "ＸＹ"));
+    themes.add(new Theme(6, "ＸＹＺ", "ＸＹＺ"));
+    themes.add(new Theme(7, "管理１", "管理"));
+    themes.add(new Theme(8, "管理２", "管理２"));
+    themes.add(new Theme(9, "管理３", "管理３"));
+    themes.add(new Theme(10, "管理４", "管理４"));
+    themes.add(new Theme(11, "管理５", "管理５"));
     themes.add(new Theme(12, "Delta", "delta"));
     themes.add(new Theme(13, "Dot-Luv", "dot-luv"));
     themes.add(new Theme(14, "Eggplant", "eggplant"));
